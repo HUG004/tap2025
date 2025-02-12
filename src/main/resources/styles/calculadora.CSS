@@ -1,0 +1,14 @@
+.button{
+    -fx-background-color: grey;
+    -fx-text-fill: white;
+    -fx-border-color: black;
+    -fx-border-radius: 30;
+    -fx-background-radius:30;
+    /*-fx-padding: 10, 10, 10, 10; */
+
+}
+
+#fontButton{
+    -fx-background-color: orange;
+
+}

@@ -20,12 +20,14 @@ public class Calculadora extends Stage{
     public void CrearUI(){
         CrearTeclado();
         txtPantalla = new TextField("0");
+        //txtPantalla.setPromptText("teclea tu operacion");
         txtPantalla.setEditable(false);
         txtPantalla.setAlignment(Pos.BASELINE_RIGHT);
         vBox = new VBox(txtPantalla, gdpTeclado);
         vBox.setSpacing(10);
         vBox.setPadding(new Insets(10));
         escena = new Scene(vBox, 200,200);
+        escena.getStylesheets().add(getClass().getResource("/styles/calculadora.CSS").toString());
 
 
     }
@@ -39,6 +41,13 @@ public class Calculadora extends Stage{
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 arBtn[i][j] = new Button(strTeclas[pos]); //instancia de los objetos en el arreglo
+                if(strTeclas[pos].equals("*") || strTeclas[pos].equals("/")
+                        || strTeclas[pos].equals("+") || strTeclas[pos].equals("-") ||strTeclas[pos].equals("=")){
+                    arBtn[i][j].setId("fontButton");
+                    arBtn[i][j].setStyle("-fx-background-color: orange");
+                }
+                int finalpos = pos;
+                arBtn[i][j].setOnAction(actionEvent -> detectarTecla(strTeclas[finalpos]));
                 arBtn[i][j].setPrefSize(50, 50);
                 gdpTeclado.add(arBtn[i][j],j,i);
                 pos++;
@@ -46,6 +55,9 @@ public class Calculadora extends Stage{
         }
     }
 
+    private void detectarTecla(String strTecla){
+        txtPantalla.appendText(strTecla);
+    }
     public Calculadora(){
         CrearUI();
         this.setScene(escena);

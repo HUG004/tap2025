@@ -29,13 +29,15 @@ public class HelloApplication extends Application {
         mnbPrincipal = new MenuBar();
         mnbPrincipal.getMenus().addAll(menCompentencia1);
         vBox = new VBox(mnbPrincipal);
+        escena = new Scene(vBox);
+        escena.getStylesheets().add(getClass().getResource("/styles/main.CSS").toString());
     }
 
     @Override
     public void start(Stage stage) throws IOException {
         CrearUI();
         stage.setTitle("Hola Mundo de Eventos :)");
-        stage.setScene(new Scene(vBox));
+        stage.setScene(escena);
         stage.show();
         stage.setMaximized(true);
     }
