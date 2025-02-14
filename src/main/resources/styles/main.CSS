@@ -1,3 +1,4 @@
 .root{
-    -fx-background- image: url("C:\Users\Usuario\IdeaProjects\tap2025\src\main\resources\image");
+    -fx-background-image: url("/image/Wallpaper.png");
+    -fx-background-size: cover;
 }

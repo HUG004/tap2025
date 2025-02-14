@@ -1,6 +1,7 @@
 package com.example.tap2025;
 
 import com.example.tap2025.vistas.Calculadora;
+import com.example.tap2025.vistas.VentasRestaurante;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -18,19 +19,22 @@ public class HelloApplication extends Application {
     private VBox vBox;
     private MenuBar mnbPrincipal;
     private Menu menCompentencia1, menCompetencia2;
-    private MenuItem mitCalculadora;
+    private MenuItem mitCalculadora, mitRestautante;
     private Scene escena;
 
     void CrearUI(){
         mitCalculadora = new MenuItem("Calculadora");
         mitCalculadora.setOnAction(event -> new Calculadora());
+        mitRestautante = new MenuItem("Restautante");
+        mitRestautante.setOnAction(actionEvent -> new VentasRestaurante());
         menCompentencia1 = new Menu("Competencia 1");
-        menCompentencia1.getItems().addAll(mitCalculadora);
+        menCompentencia1.getItems().addAll(mitCalculadora,mitRestautante);
         mnbPrincipal = new MenuBar();
         mnbPrincipal.getMenus().addAll(menCompentencia1);
         vBox = new VBox(mnbPrincipal);
         escena = new Scene(vBox);
-        escena.getStylesheets().add(getClass().getResource("/styles/main.CSS").toString());
+        System.out.println(getClass().getResource("/image/Wallpaper.png"));
+        escena.getStylesheets().add(getClass().getResource("/image/Wallpaper.png").toString());
     }
 
     @Override
