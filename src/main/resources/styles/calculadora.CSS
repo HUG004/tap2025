@@ -12,3 +12,6 @@
     -fx-background-color: orange;
 
 }
+.root{
+-fx-base: rgb(30, 30, 30);
+}
