@@ -1,7 +1,9 @@
 package com.example.tap2025;
 
+import com.example.tap2025.models.conexion;
 import com.example.tap2025.vistas.Calculadora;
 import com.example.tap2025.vistas.VentasRestaurante;
+import com.example.tap2025.vistas.rompecabezas;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -19,7 +21,7 @@ public class HelloApplication extends Application {
     private VBox vBox;
     private MenuBar mnbPrincipal;
     private Menu menCompentencia1, menCompetencia2;
-    private MenuItem mitCalculadora, mitRestautante;
+    private MenuItem mitCalculadora, mitRestautante, mitRompecabezas;
     private Scene escena;
 
     void CrearUI(){
@@ -27,8 +29,10 @@ public class HelloApplication extends Application {
         mitCalculadora.setOnAction(event -> new Calculadora());
         mitRestautante = new MenuItem("Restautante");
         mitRestautante.setOnAction(actionEvent -> new VentasRestaurante());
+        mitRompecabezas = new MenuItem("Rompecabezas");
+        mitRompecabezas.setOnAction(actionEvent -> new rompecabezas());
         menCompentencia1 = new Menu("Competencia 1");
-        menCompentencia1.getItems().addAll(mitCalculadora,mitRestautante);
+        menCompentencia1.getItems().addAll(mitCalculadora,mitRestautante, mitRompecabezas);
         mnbPrincipal = new MenuBar();
         mnbPrincipal.getMenus().addAll(menCompentencia1);
         vBox = new VBox(mnbPrincipal);
@@ -39,6 +43,7 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        conexion.createConnection();
         CrearUI();
         stage.setTitle("Hola Mundo de Eventos :)");
         stage.setScene(escena);
