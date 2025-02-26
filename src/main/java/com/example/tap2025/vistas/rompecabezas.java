@@ -20,7 +20,7 @@ public class rompecabezas extends Stage {
     private int cols;
     private Image image;
     private List<ImageView> piezas = new ArrayList<>();
-    private GridPane grid;
+    private GridPane gdp;
     private ImageView piezaSeleccionada = null;
     private Instant startTime;
 
@@ -51,7 +51,7 @@ public class rompecabezas extends Stage {
     private void iniciarJuego(Stage stage, int filas, int columnas) {
         this.rows = filas;
         this.cols = columnas;
-        grid = new GridPane();
+        gdp = new GridPane();
         stage.close();
 
         try {
@@ -66,11 +66,11 @@ public class rompecabezas extends Stage {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                ImageView piece = new ImageView(image);
-                piece.setViewport(new Rectangle2D(j * pieceWidth, i * pieceHeight, pieceWidth, pieceHeight));
-                piece.setUserData(new int[]{i, j});
-                piece.setOnMouseClicked(event -> intercambiarPiezas(piece));
-                piezas.add(piece);
+                ImageView pieza = new ImageView(image);
+                pieza.setViewport(new Rectangle2D(j * pieceWidth, i * pieceHeight, pieceWidth, pieceHeight));
+                pieza.setUserData(new int[]{i, j});
+                pieza.setOnMouseClicked(event -> intercambiarPiezas(pieza));
+                piezas.add(pieza);
             }
         }
 
@@ -80,7 +80,7 @@ public class rompecabezas extends Stage {
         startTime = Instant.now();
 
         Stage gameStage = new Stage();
-        Scene scene = new Scene(grid, image.getWidth(), image.getHeight());
+        Scene scene = new Scene(gdp, image.getWidth(), image.getHeight());
         gameStage.setTitle("Rompecabezas Interactivo");
         gameStage.setScene(scene);
         gameStage.show();
@@ -102,11 +102,11 @@ public class rompecabezas extends Stage {
     }
 
     private void actualizarGrid() {
-        grid.getChildren().clear();
+        gdp.getChildren().clear();
         int index = 0;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                grid.add(piezas.get(index), j, i);
+                gdp.add(piezas.get(index), j, i);
                 index++;
             }
         }
