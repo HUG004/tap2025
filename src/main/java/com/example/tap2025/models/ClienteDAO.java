@@ -1,5 +1,11 @@
 package com.example.tap2025.models;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 public class ClienteDAO {
     private int id_cliente;
     private String nom_cliente;
@@ -17,14 +23,8 @@ public class ClienteDAO {
         this.id_cliente = id_cliente;
     }
 
-    public String getNom_cliente() {
-        return nom_cliente;
-    }
-
-    public void setNom_cliente(String nom_cliente) {
-        this.nom_cliente = nom_cliente;
-    }
-
+    public String getNom_cliente(){return nom_cliente;}
+   public void  setNom_cliente(String nom_cliente){this.nom_cliente = nom_cliente;}
     public String getApellido1() {
         return apellido1;
     }
@@ -67,14 +67,55 @@ public class ClienteDAO {
     public void INSERT(){
         String query = "INSERT INTO cliente(nom_cliente,apellido1,apellido2, direccion, tel_cliente, email_cliente, )"
                 + "values('"+nom_cliente+"','"+apellido1+"', '"+apellido2+"', '"+direccion+"', '"+tel_cliente+"', '"+email_cliente+"') ";
+        try{
+            Statement stmt =  conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void UPDATE(){
+        String query = "UPDATE cliente SET nombre = '"+nom_cliente+"', tel_cliente = '"+tel_cliente+"'," +
+                " direccion = '"+direccion+"', email_cliente = '"+email_cliente+"' WHERE id_cliente = "+id_cliente;
+        try{
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
     public void DELETE(){
+        String query = "DELETE FROM cliente WHERE id_cliente = " +id_cliente;
+        try{
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
-    public void SELECT(){
-
+    public ObservableList<ClienteDAO> SELECT(){
+        String query = "SELECT * FROM cliente";
+        ObservableList<ClienteDAO> listaC = FXCollections.observableArrayList();
+        ClienteDAO objC;
+        try{
+            Statement stmt = conexion.connection.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while(res.next()){
+                objC = new ClienteDAO();
+                objC.setId_cliente(res.getInt("id_cliente"));
+                objC.setNom_cliente(res.getString("nom_cliente"));
+                objC.setApellido1(res.getString("apellido1"));
+                objC.setApellido2(res.getString("apellido2"));
+                objC.setDireccion(res.getString("direccion"));
+                objC.setEmail_cliente(res.getString("email_cliente"));
+                objC.setTel_cliente(res.getString("tel_cliente"));
+                listaC.add(objC);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return listaC;
     }
 }
