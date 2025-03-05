@@ -25,19 +25,20 @@ public class ListaClientes extends Stage {
         this.show();
     }
     private void CrearUI(){
+        tbvClientes = new TableView<>();
         btnAgegar = new Button();
-
+        btnAgegar.setOnAction(actionEvent -> new FormCliente(tbvClientes));
         ImageView img = new ImageView(getClass().getResource("/image/agregar.png").toString());
         img.setFitWidth(30);
         img.setFitHeight(30);
         btnAgegar.setGraphic(img);
         tlbMenu = new ToolBar(btnAgegar);
-        tbvClientes = new TableView<>();
         CreateTable();
         vBox = new VBox(tlbMenu,tbvClientes);
         escena = new Scene(vBox,800,400);
     }
     private void CreateTable(){
+
         ClienteDAO objC = new ClienteDAO();
         TableColumn<ClienteDAO,String> tbcNombre = new TableColumn<>("Nombre");
         tbcNombre.setCellValueFactory(new PropertyValueFactory<>("nom_cliente"));
