@@ -1,15 +1,14 @@
 package com.example.tap2025.vistas;
 
+import com.example.tap2025.componentes.ButtonCell;
 import com.example.tap2025.models.ClienteDAO;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class ListaClientes extends Stage {
     private ToolBar tlbMenu;
@@ -50,7 +49,21 @@ public class ListaClientes extends Stage {
         tbcEmail.setCellValueFactory(new PropertyValueFactory<>("email_cliente"));
         TableColumn<ClienteDAO,String> tbcTelefono = new TableColumn<>("Telefono");
         tbcTelefono.setCellValueFactory(new PropertyValueFactory<>("tel_cliente"));
-        tbvClientes.getColumns().addAll(tbcNombre, tbcApellido, tbcDireccion, tbcEmail, tbcTelefono);
+        TableColumn<ClienteDAO,String> tbcEditar = new TableColumn<>("Editar");
+        tbcEditar.setCellFactory(new Callback<TableColumn<ClienteDAO, String>, TableCell<ClienteDAO, String>>() {
+            @Override
+            public TableCell<ClienteDAO, String> call(TableColumn<ClienteDAO, String> clienteDAOStringTableColumn) {
+                return new ButtonCell("Editar");
+            }
+        });
+        TableColumn<ClienteDAO,String> tbcEliminar = new TableColumn<>("Eliminar");
+        tbcEliminar.setCellFactory(new Callback<TableColumn<ClienteDAO, String>, TableCell<ClienteDAO, String>>() {
+            @Override
+            public TableCell<ClienteDAO, String> call(TableColumn<ClienteDAO, String> clienteDAOStringTableColumn) {
+                return new ButtonCell("Eliminar");
+            }
+        });
+        tbvClientes.getColumns().addAll(tbcNombre, tbcApellido, tbcDireccion, tbcEmail, tbcTelefono, tbcEditar, tbcEliminar);
         tbvClientes.setItems(objC.SELECT());
     }
 }
