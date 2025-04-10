@@ -1,44 +1,54 @@
 package com.example.tap2025.componentes;
 
-import com.example.tap2025.models.ClienteDAO;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableCell;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-public class ButtonCell extends TableCell<ClienteDAO, String> {
-     private Button btnCell;
-     private String str;
+public class ButtonCell<T> extends TableCell<T, String> {
+    private final Button btnCell;
+    private final String action;
+    private final BiConsumer<TableView<T>, T> onEdit;
+    private final Function<T, Void> onDelete;
+    private final Function<T, ObservableList<T>> onRefresh;
 
-    public ButtonCell(String label){
+    public ButtonCell(String action, BiConsumer<TableView<T>, T> onEdit,
+                      Function<T, Void> onDelete, Function<T, ObservableList<T>> onRefresh) {
+        this.action = action;
+        this.onEdit = onEdit;
+        this.onDelete = onDelete;
+        this.onRefresh = onRefresh;
 
-        str = label;
-        btnCell = new Button(str);
-        btnCell.setOnAction(actionEvent -> {
-            ClienteDAO objC = this.getTableView().getItems().get(this.getIndex());
-            if (str.equals("Editar")){
-
-            }else{
+        btnCell = new Button(action);
+        btnCell.setOnAction(event -> {
+            T item = getTableView().getItems().get(getIndex());
+            if (action.equals("Editar")) {
+                onEdit.accept(getTableView(), item);
+            } else {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Mensaje del sistema");
+                alert.setTitle("Confirmación");
                 alert.setContentText("¿Deseas eliminar el registro seleccionado?");
                 Optional<ButtonType> opcion = alert.showAndWait();
-                if (opcion.get() == ButtonType.OK){
-                    objC.DELETE();
-
+                if (opcion.isPresent() && opcion.get() == ButtonType.OK) {
+                    onDelete.apply(item);
+                    getTableView().setItems(onRefresh.apply(item));
+                    getTableView().refresh();
                 }
             }
-            this.getTableView().setItems(objC.SELECT());
-            this.getTableView().refresh();
         });
-
     }
-    protected void updateItem(String item, boolean empty){
+
+    @Override
+    protected void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
-        if(!empty){
-            this.setGraphic(btnCell);
+        if (!empty) {
+            setGraphic(btnCell);
+        } else {
+            setGraphic(null);
         }
     }
 }

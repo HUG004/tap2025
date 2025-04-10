@@ -16,10 +16,19 @@ public class FormCliente extends Stage {
     private ClienteDAO objC;
     private TableView<ClienteDAO> tbvClientes;
 
-    public FormCliente(TableView<ClienteDAO> tbvClientes){
+    public FormCliente(TableView<ClienteDAO> tbvClientes,ClienteDAO obj){
         this.tbvClientes = tbvClientes;
-        objC = new ClienteDAO();
         CrearUI();
+        if( obj == null ){
+            objC = new ClienteDAO();
+        }else{
+            objC = obj;
+            txtnombre.setText(objC.getNom_cliente());
+            txtapellido.setText(objC.getApellido1());
+            txtdireccion.setText(objC.getDireccion());
+            txtemail.setText(objC.getEmail_cliente());
+            txtTel.setText(objC.getTel_cliente());
+        }
         this.setTitle("Registrar Cliente");
         this.setScene(escena);
         this.show();
@@ -42,7 +51,10 @@ public class FormCliente extends Stage {
             objC.setDireccion(txtdireccion.getText());
             objC.setEmail_cliente(txtemail.getText());
             objC.setTel_cliente(txtTel.getText());
-            objC.INSERT();
+            if( objC.getId_cliente() > 0 )
+                objC.UPDATE();
+            else
+                objC.INSERT();
             tbvClientes.setItems(objC.SELECT());
             tbvClientes.refresh();
             this.close();

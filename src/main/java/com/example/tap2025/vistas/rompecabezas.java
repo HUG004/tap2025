@@ -129,15 +129,15 @@ public class rompecabezas extends Stage {
 
     private void mostrarMensajeVictoria() {
         Instant endTime = Instant.now();
-        long elapsedTime = Duration.between(startTime, endTime).getSeconds();
+        long tiempoTranscurrido = Duration.between(startTime, endTime).getSeconds();
 
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("¡Felicidades!");
         alerta.setHeaderText(null);
-        alerta.setContentText("¡Has completado el rompecabezas en " + elapsedTime + " segundos!");
+        alerta.setContentText("¡Has completado el rompecabezas en " + tiempoTranscurrido + " segundos!");
         alerta.showAndWait();
 
-        guardarTiempoEnArchivo(elapsedTime);
+        guardarTiempoEnArchivo(tiempoTranscurrido);
     }
 
     private void guardarTiempoEnArchivo(long tiempo) {

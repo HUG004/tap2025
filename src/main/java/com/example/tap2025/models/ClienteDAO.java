@@ -2,7 +2,6 @@ package com.example.tap2025.models;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -24,7 +23,8 @@ public class ClienteDAO {
     }
 
     public String getNom_cliente(){return nom_cliente;}
-   public void  setNom_cliente(String nom_cliente){this.nom_cliente = nom_cliente;}
+    public void  setNom_cliente(String nom_cliente){this.nom_cliente = nom_cliente;}
+
     public String getApellido1() {
         return apellido1;
     }
@@ -65,7 +65,7 @@ public class ClienteDAO {
         this.email_cliente = email_cliente;
     }
     public void INSERT(){
-        String query = "INSERT INTO cliente(nom_cliente,apellido1,apellido2, direccion, tel_cliente, email_cliente, )"
+        String query = "INSERT INTO cliente(nom_cliente,apellido1,apellido2, direccion, tel_cliente, email_cliente)"
                 + "values('"+nom_cliente+"','"+apellido1+"', '"+apellido2+"', '"+direccion+"', '"+tel_cliente+"', '"+email_cliente+"') ";
         try{
             Statement stmt =  conexion.connection.createStatement();
@@ -75,7 +75,7 @@ public class ClienteDAO {
         }
     }
     public void UPDATE(){
-        String query = "UPDATE cliente SET nombre = '"+nom_cliente+"', tel_cliente = '"+tel_cliente+"'," +
+        String query = "UPDATE cliente SET nom_cliente = '"+nom_cliente+"', apellido1 = '"+apellido1+"', tel_cliente = '"+tel_cliente+"'," +
                 " direccion = '"+direccion+"', email_cliente = '"+email_cliente+"' WHERE id_cliente = "+id_cliente;
         try{
             Statement stmt = conexion.connection.createStatement();
@@ -95,7 +95,7 @@ public class ClienteDAO {
         }
 
     }
-    public ObservableList<ClienteDAO> SELECT(){
+    public  static ObservableList<ClienteDAO> SELECT(){
         String query = "SELECT * FROM cliente";
         ObservableList<ClienteDAO> listaC = FXCollections.observableArrayList();
         ClienteDAO objC;

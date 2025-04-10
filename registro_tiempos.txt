@@ -2,3 +2,9 @@ Tiempo: 10 segundos
 Tiempo: 181 segundos
 Tiempo: 80 segundos
 Tiempo: 103 segundos
+Tiempo: 40 segundos
+Tiempo: 38 segundos
+Tiempo: 97 segundos
+Tiempo: 116 segundos
+Tiempo: 61 segundos
+Tiempo: 17 segundos

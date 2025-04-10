@@ -1,10 +1,8 @@
 package com.example.tap2025;
 
+import com.example.tap2025.componentes.Hilo;
 import com.example.tap2025.models.conexion;
-import com.example.tap2025.vistas.Calculadora;
-import com.example.tap2025.vistas.ListaClientes;
-import com.example.tap2025.vistas.VentasRestaurante;
-import com.example.tap2025.vistas.rompecabezas;
+import com.example.tap2025.vistas.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -27,21 +25,27 @@ public class HelloApplication extends Application {
     private VBox vBox;
     private MenuBar mnbPrincipal;
     private Menu menCompentencia1, menCompetencia2;
-    private MenuItem mitCalculadora, mitRestautante, mitRompecabezas;
+    private MenuItem mitCalculadora, mitRestautante, mitRompecabezas,mitCelayork;
     private Scene escena;
 
     void CrearUI(){
         mitCalculadora = new MenuItem("Calculadora");
         mitCalculadora.setOnAction(event -> new Calculadora());
         mitRestautante = new MenuItem("Restaurante");
-        mitRestautante.setOnAction(actionEvent -> new ListaClientes());
+        mitRestautante.setOnAction(actionEvent -> new ListaEmpleados());
         mitRompecabezas = new MenuItem("Rompecabezas");
         mitRompecabezas.setOnAction(actionEvent -> new rompecabezas());
 
         menCompentencia1 = new Menu("Competencia 1");
         menCompentencia1.getItems().addAll(mitCalculadora, mitRestautante, mitRompecabezas);
+
+        mitCelayork = new MenuItem("Celayork");
+        mitCelayork.setOnAction(actionEvent -> new Celayork());
+        menCompetencia2 = new Menu("Competencia 2");
+        menCompetencia2.getItems().addAll(mitCelayork);
+
         mnbPrincipal = new MenuBar();
-        mnbPrincipal.getMenus().addAll(menCompentencia1);
+        mnbPrincipal.getMenus().addAll(menCompentencia1,menCompetencia2);
 
         try {
             image = new Image(getClass().getResourceAsStream(IMAGE_PATH));
@@ -61,6 +65,14 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        /*new Hilo("Ruta pinos").start();
+        new Hilo("Ruta Laureles").start();
+        new Hilo("Ruta Monte Blanco").start();
+        new Hilo("Ruta Teneria").start();
+        new Hilo("CHECO PEREZ").start();
+
+         */
+
         conexion.createConnection();
         CrearUI();
         stage.setTitle("Hola Mundo de Eventos :)");
