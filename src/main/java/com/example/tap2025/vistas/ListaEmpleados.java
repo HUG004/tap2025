@@ -35,7 +35,7 @@ public class ListaEmpleados extends Stage {
         tlbMenu = new ToolBar(btnAgregar);
         CreateTable();
         vBox = new VBox(tlbMenu, tbvEmpleados);
-        escena = new Scene(vBox, 1200, 500);
+        escena = new Scene(vBox, 900, 500);
     }
 
     private void CreateTable() {

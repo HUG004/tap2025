@@ -72,7 +72,7 @@ public class ProductoDAO {
         }
 
     }
-    public ObservableList<ProductoDAO> SELECT(){
+    public  static ObservableList<ProductoDAO> SELECT(){
         String query = "SELECT * FROM producto";
         ObservableList<ProductoDAO> listap = FXCollections.observableArrayList();
         ProductoDAO objp;

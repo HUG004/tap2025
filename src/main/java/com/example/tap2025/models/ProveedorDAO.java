@@ -88,7 +88,7 @@ public class ProveedorDAO {
         }
 
     }
-    public ObservableList<ProveedorDAO> SELECT(){
+    public static ObservableList<ProveedorDAO> SELECT(){
         String query = "SELECT * FROM proveedor";
         ObservableList<ProveedorDAO> listaPr = FXCollections.observableArrayList();
         ProveedorDAO objPr;

@@ -62,7 +62,7 @@ public class CategoriaDAO {
         }
 
     }
-    public ObservableList<CategoriaDAO> SELECT(){
+    public static ObservableList<CategoriaDAO> SELECT(){
         String query = "SELECT * FROM categoria";
         ObservableList<CategoriaDAO> listaCa = FXCollections.observableArrayList();
         CategoriaDAO objCa;

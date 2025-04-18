@@ -35,7 +35,7 @@ public class tipo_categoriaDAO {
         }
     }
     public void UPDATE(){
-        String query = "UPDATE tipo_categoria SET cateoria = '"+categoria+"' WHERE id_tipo_categoria = "+id_tipo_categoria;
+        String query = "UPDATE tipo_categoria SET categoria = '"+categoria+"' WHERE id_tipo_categoria = "+id_tipo_categoria;
         try{
             Statement stmt = conexion.connection.createStatement();
             stmt.executeUpdate(query);
@@ -54,7 +54,7 @@ public class tipo_categoriaDAO {
         }
 
     }
-    public ObservableList<tipo_categoriaDAO> SELECT(){
+    public static ObservableList<tipo_categoriaDAO> SELECT(){
         String query = "SELECT * FROM tipo_categoria";
         ObservableList<tipo_categoriaDAO> listaTC = FXCollections.observableArrayList();
         tipo_categoriaDAO objTC;
