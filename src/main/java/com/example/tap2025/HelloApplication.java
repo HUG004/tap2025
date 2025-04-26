@@ -32,7 +32,7 @@ public class HelloApplication extends Application {
         mitCalculadora = new MenuItem("Calculadora");
         mitCalculadora.setOnAction(event -> new Calculadora());
         mitRestautante = new MenuItem("Restaurante");
-        mitRestautante.setOnAction(actionEvent -> new viewAdmin());
+        mitRestautante.setOnAction(actionEvent -> new Login());
         mitRompecabezas = new MenuItem("Rompecabezas");
         mitRompecabezas.setOnAction(actionEvent -> new rompecabezas());
 

@@ -1,6 +1,8 @@
 package com.example.tap2025.models;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -33,25 +35,32 @@ public class Detalle_ProductoDAO {
         this.cantidad = cantidad;
     }
 
-    public void INSERT(){
+    public int INSERT(){
         String query = "INSERT INTO detalle_producto(id_producto, id_insumo, cantidad)"
-                + "values('"+id_producto+"','"+id_insumo+"','"+cantidad+"') ";
-        try{
-            Statement stmt =  conexion.connection.createStatement();
-            stmt.executeUpdate(query);
+                + "values(?,?,?) ";
+        try(PreparedStatement stmt =  conexion.connection.prepareStatement(query)){
+
+            stmt.setInt(1, this.id_producto);
+            stmt.setInt(2,this.id_insumo);
+            stmt.setInt(3,this.cantidad);
+            return stmt.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
+            return 0;
         }
     }
-    public void UPDATE(){
-        String query = "UPDATE detalle_producto SET id_producto = '"+id_producto+"', id_insumo = '"+id_insumo+"', cantidad = '"+cantidad+"' WHERE id_producto= "+id_producto + " and id_insumo = "+id_insumo;
-        try{
-            Statement stmt = conexion.connection.createStatement();
-            stmt.executeUpdate(query);
+    public int UPDATE(){
+        String query = "UPDATE detalle_producto SET id_producto = ?, id_insumo = ?, cantidad = ? WHERE id_producto= ? and id_insumo = ?";
+        try(PreparedStatement stmt =  conexion.connection.prepareStatement(query)){
+
+            stmt.setInt(1, this.id_producto);
+            stmt.setInt(2,this.id_insumo);
+            stmt.setInt(3,this.cantidad);
+            return stmt.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
+            return 0;
         }
-
     }
     public void DELETE(){
         String query = "DELETE FROM detalle_producto WHERE id_producto = " +id_producto + " and id_insumo = " +id_insumo;
@@ -63,7 +72,7 @@ public class Detalle_ProductoDAO {
         }
 
     }
-    public ObservableList<Detalle_ProductoDAO> SELECT(){
+    public static ObservableList<Detalle_ProductoDAO> SELECT(){
         String query = "SELECT * FROM detalle_producto";
         ObservableList<Detalle_ProductoDAO> listadp = FXCollections.observableArrayList();
         Detalle_ProductoDAO objdp;
@@ -81,6 +90,18 @@ public class Detalle_ProductoDAO {
             e.printStackTrace();
         }
         return listadp;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Detalle_ProductoDAO that = (Detalle_ProductoDAO) o;
+        return id_producto == that.id_producto && id_insumo == that.id_insumo;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id_producto + id_insumo;
     }
 
 }

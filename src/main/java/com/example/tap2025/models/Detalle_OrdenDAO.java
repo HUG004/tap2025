@@ -1,14 +1,26 @@
 package com.example.tap2025.models;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Detalle_OrdenDAO {
     private int id_producto;
     private int id_orden;
     private int cantidad;
+    private ProductoDAO producto;
 
+    public ProductoDAO getProducto() {
+        return producto;
+    }
+
+    public void setProducto(ProductoDAO producto) {
+        this.producto = producto;
+    }
     public int getId_producto() {
         return id_producto;
     }
@@ -32,6 +44,7 @@ public class Detalle_OrdenDAO {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
     public void INSERT(){
         String query = "INSERT INTO detalle_orden(id_producto, id_orden, cantidad)"
                 + "values('"+id_producto+"','"+id_orden+"','"+cantidad+"') ";
@@ -81,5 +94,87 @@ public class Detalle_OrdenDAO {
         }
         return listaDO;
     }
+    public Detalle_OrdenDAO(int id_orden, ProductoDAO producto, int cantidad) {
+        this.id_orden = id_orden;
+        this.id_producto = producto.getId_producto(); // extrae el id del producto
+        this.producto = producto;
+        this.cantidad = cantidad;
+    }
+    public Detalle_OrdenDAO() {
+    }
+    public static ObservableList<PieChart.Data> obtenerProductosConMasVentas(){
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        String query = """
+        SELECT p.producto AS producto, SUM(do.cantidad) AS total_venta
+        FROM detalle_orden do
+        JOIN producto p ON do.id_producto = p.id_producto
+        GROUP BY p.producto
+        ORDER BY total_venta DESC
+    """;
 
+        try (Statement stmt = conexion.connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                String producto = rs.getString("producto");
+                int cantidad = rs.getInt("total_venta");
+                pieChartData.add(new PieChart.Data(producto, cantidad));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return pieChartData;
+    }
+    public static ObservableList<XYChart.Data<String, Number>> obtenerFechasConMasVentas() {
+        ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
+
+        String query = """
+        SELECT COUNT(do.id_orden) AS total_ventas, o.fecha AS fecha
+        FROM orden o
+        JOIN detalle_orden do ON o.id_orden = do.id_orden
+        GROUP BY o.fecha
+        ORDER BY total_ventas DESC
+    """;
+
+        try (Statement stmt = conexion.connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                String fecha = rs.getString("fecha");
+                int totalVentas = rs.getInt("total_ventas");
+                barChartData.add(new XYChart.Data<>(fecha, totalVentas));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return barChartData;
+    }
+    public static ObservableList<XYChart.Data<String, Number>> obtenerEmpleadosConMasVentas() {
+        ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
+
+        String query = """
+    SELECT e.nombre AS empleado, COUNT(do.id_orden) AS total_ventas
+    FROM empleado e
+    JOIN orden o ON e.id_empleado = o.id_empleado
+    JOIN detalle_orden do ON o.id_orden = do.id_orden
+    GROUP BY e.nombre
+    ORDER BY total_ventas DESC;
+    """;
+
+            try (Statement stmt = conexion.connection.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+
+                while (rs.next()) {
+                    String Empleado = rs.getString("Empleado");
+                    int totalVentas = rs.getInt("total_ventas");
+                    barChartData.add(new XYChart.Data<>(Empleado, totalVentas));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return barChartData;
+        }
 }

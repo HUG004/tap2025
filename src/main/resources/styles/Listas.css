@@ -59,6 +59,15 @@
     -fx-background-color: #191414;
 }
 
+.background-charcoal {
+    -fx-background-color: #2E3440;
+}
+
+.layout-visible {
+    -fx-text-fill: white;
+}
+
+
 .title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;

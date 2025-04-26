@@ -107,7 +107,7 @@ public class EmpleadoDAO {
         }
 
     }
-    public ObservableList<EmpleadoDAO> SELECT(){
+    public  static ObservableList<EmpleadoDAO> SELECT(){
         String query = "SELECT * FROM empleado";
         ObservableList<EmpleadoDAO> listaE = FXCollections.observableArrayList();
         EmpleadoDAO objE;

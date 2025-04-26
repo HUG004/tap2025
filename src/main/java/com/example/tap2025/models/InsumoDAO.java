@@ -72,7 +72,7 @@ public class InsumoDAO {
         }
 
     }
-    public ObservableList<InsumoDAO> SELECT(){
+    public  static ObservableList<InsumoDAO> SELECT(){
         String query = "SELECT * FROM insumo";
         ObservableList<InsumoDAO> listaI = FXCollections.observableArrayList();
         InsumoDAO objI;

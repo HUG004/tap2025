@@ -1,6 +1,8 @@
 package com.example.tap2025.models;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -32,27 +34,32 @@ public class Reservacion_MesaDAO {
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
     }
-    public void INSERT(){
+    public int INSERT(){
         String query = "INSERT INTO reservacion_mesa(id_reservacion, id_mesa, comentarios)"
-                + "values('"+id_reservacion+"', '"+id_mesa+"', '"+comentarios+"') ";
-        try{
-            Statement stmt =  conexion.connection.createStatement();
-            stmt.executeUpdate(query);
+                + "values(?, ?, ?) ";
+        try(PreparedStatement  stmt =  conexion.connection.prepareStatement(query)){
+
+            stmt.setInt(1, this.id_reservacion);
+            stmt.setInt(2,this.id_mesa);
+            stmt.setString(3,this.comentarios);
+            return stmt.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
+            return 0;
         }
     }
     public void UPDATE(){
-        String query = "UPDATE reservacion_mesa SET id_reservacion = '"+id_reservacion+"'," +
-                " id_mesa = '"+ id_mesa+"', comentarios = '"+comentarios+"' WHERE id_reservacion= "+id_reservacion + " and id_mesa = "+id_mesa;
-        try{
-            Statement stmt = conexion.connection.createStatement();
-            stmt.executeUpdate(query);
-        }catch (Exception e){
+        String query = "UPDATE reservacion_mesa SET comentarios = ? WHERE id_reservacion = ? AND id_mesa = ?";
+        try (PreparedStatement stmt = conexion.connection.prepareStatement(query)) {
+            stmt.setString(1, this.comentarios);
+            stmt.setInt(2, this.id_reservacion);
+            stmt.setInt(3, this.id_mesa);
+            stmt.executeUpdate();
+        } catch (Exception e){
             e.printStackTrace();
         }
-
     }
+
     public void DELETE(){
         String query = "DELETE FROM reservacion_mesa WHERE id_mesa = " +id_mesa + " and id_reservacion = " +id_reservacion;
         try{
@@ -63,7 +70,7 @@ public class Reservacion_MesaDAO {
         }
 
     }
-    public ObservableList<Reservacion_MesaDAO> SELECT(){
+    public static ObservableList<Reservacion_MesaDAO> SELECT(){
         String query = "SELECT * FROM reservacion_mesa";
         ObservableList<Reservacion_MesaDAO> listaRM = FXCollections.observableArrayList();
         Reservacion_MesaDAO objRM;
@@ -81,6 +88,18 @@ public class Reservacion_MesaDAO {
             e.printStackTrace();
         }
         return listaRM;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservacion_MesaDAO that = (Reservacion_MesaDAO) o;
+        return id_reservacion == that.id_reservacion && id_mesa == that.id_mesa;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id_reservacion + id_mesa;
     }
 
 }

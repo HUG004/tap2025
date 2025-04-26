@@ -2,6 +2,7 @@ package com.example.tap2025.vistas;
 
 import com.example.tap2025.componentes.ButtonCell;
 import com.example.tap2025.models.EmpleadoDAO;
+import com.example.tap2025.models.ProductoDAO;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -73,18 +74,18 @@ public class ListaEmpleados extends Stage {
                 "Editar",
                 (tableView, empleado) -> new FormEmpleados(tableView, empleado),
                 e -> null, // No hace nada en "Editar"
-                EmpleadoDAO::SELECT
+                e -> EmpleadoDAO.SELECT()
         ));
 
         TableColumn<EmpleadoDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (tableView, empleado) -> {}, // No hace nada en "Eliminar"
+                (table, empleado) -> {}, // No se usa en eliminar
                 empleado -> {
                     empleado.DELETE();
                     return null;
                 },
-                EmpleadoDAO::SELECT
+                e -> EmpleadoDAO.SELECT()
         ));
 
         tbvEmpleados.getColumns().addAll(

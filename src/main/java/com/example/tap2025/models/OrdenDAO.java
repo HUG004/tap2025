@@ -1,15 +1,17 @@
 package com.example.tap2025.models;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class OrdenDAO {
     private int id_orden;
     private int id_cliente;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private int id_mesa;
     private int id_empleado;
 
@@ -29,11 +31,11 @@ public class OrdenDAO {
         this.id_cliente = id_cliente;
     }
 
-    public LocalDate getFecha(){
+    public LocalDateTime getFecha(){
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 
@@ -52,18 +54,27 @@ public class OrdenDAO {
     public void setId_empleado(int id_empleado) {
         this.id_empleado = id_empleado;
     }
-    public void INSERT(){
-        String query = "INSERT INTO orden(id_cliente, fecha, id_mesa, id_empleado)"
-                + "values('"+id_cliente+"','"+fecha+"','"+id_mesa+"', '"+id_empleado+"') ";
-        try{
-            Statement stmt =  conexion.connection.createStatement();
-            stmt.executeUpdate(query);
-        }catch (Exception e){
+
+    public void INSERT() {
+        String query = "INSERT INTO orden(id_cliente, id_mesa, id_empleado) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement pstmt = conexion.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, id_cliente);
+            pstmt.setInt(2, id_mesa);
+            pstmt.setInt(3, id_empleado);
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                this.id_orden = rs.getInt(1); // recupera el id_orden generado
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void UPDATE(){
-        String query = "UPDATE orden SET id_cliente = '"+id_cliente+"', fecha = '"+fecha+"', mesa = '"+id_mesa+"', empleado = '"+id_empleado+"' WHERE id_orden = "+id_orden;
+
+    public  void UPDATE(){
+        String query = "UPDATE orden SET id_cliente = '"+id_cliente+"', id_mesa = '"+id_mesa+"', id_empleado = '"+id_empleado+"' WHERE id_orden = "+id_orden;
         try{
             Statement stmt = conexion.connection.createStatement();
             stmt.executeUpdate(query);
@@ -92,11 +103,8 @@ public class OrdenDAO {
             while(res.next()){
                 objO = new OrdenDAO();
                 objO.setId_orden(res.getInt("id_orden"));
-                // Convertir Timestamp a LocalDate
-                Timestamp ts = res.getTimestamp("fecha");
-                if (ts != null) {
-                    objO.setFecha(ts.toLocalDateTime().toLocalDate());
-                }
+                objO.setId_cliente(res.getInt("id_cliente"));
+                objO.setFecha(res.getTimestamp("fecha").toLocalDateTime());
                 objO.setId_mesa(res.getInt("id_mesa"));
                 objO.setId_empleado(res.getInt("id_empleado"));
                 listaO.add(objO);
@@ -106,4 +114,24 @@ public class OrdenDAO {
         }
         return listaO;
     }
+    public static void UPDATE_MESA(int id_mesa, int id_orden) {
+        String query = "UPDATE orden SET id_mesa = '" + id_mesa + "' WHERE id_orden = " + id_orden;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private EmpleadoDAO empleado;
+
+    public EmpleadoDAO getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(EmpleadoDAO empleado) {
+        this.empleado = empleado;
+    }
+
+
 }

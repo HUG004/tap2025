@@ -38,15 +38,11 @@ public class ReservacionDAO {
     }
 
     public void INSERT() {
-        String query = "INSERT INTO reservacion(id_cliente, fecha_reservacion) VALUES ('"+id_cliente+"', '"+fecha_reservacion+"')";
+        String query = "INSERT INTO reservacion(id_cliente, fecha_reservacion) VALUES (?, ?)";
         try {
             PreparedStatement stmt = conexion.connection.prepareStatement(query);
             stmt.setInt(1, id_cliente);
-
-            // Convertir LocalDate a Timestamp (agregamos hora 00:00:00)
-            LocalDateTime dateTime = fecha_reservacion.atStartOfDay();
-            stmt.setTimestamp(2, Timestamp.valueOf(dateTime));
-
+            stmt.setTimestamp(2, Timestamp.valueOf(fecha_reservacion.atStartOfDay()));
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,17 +50,12 @@ public class ReservacionDAO {
     }
 
     public void UPDATE() {
-        String query = "UPDATE reservacion SET id_cliente = '"+id_cliente+"', fecha_reservacion = '"+fecha_reservacion+"' WHERE id_reservacion = " +id_reservacion;
+        String query = "UPDATE reservacion SET id_cliente = ?, fecha_reservacion = ? WHERE id_reservacion = ?";
         try {
             PreparedStatement stmt = conexion.connection.prepareStatement(query);
             stmt.setInt(1, id_cliente);
-
-            // Convertir LocalDate a Timestamp (hora 00:00:00)
-            LocalDateTime dateTime = fecha_reservacion.atStartOfDay();
-            stmt.setTimestamp(2, Timestamp.valueOf(dateTime));
-
+            stmt.setTimestamp(2, Timestamp.valueOf(fecha_reservacion.atStartOfDay()));
             stmt.setInt(3, id_reservacion);
-
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,7 +63,7 @@ public class ReservacionDAO {
     }
 
     public void DELETE() {
-        String query = "DELETE FROM reservacion WHERE id_reservacion = " +id_reservacion;
+        String query = "DELETE FROM reservacion WHERE id_reservacion = ?";
         try {
             PreparedStatement stmt = conexion.connection.prepareStatement(query);
             stmt.setInt(1, id_reservacion);
@@ -82,7 +73,8 @@ public class ReservacionDAO {
         }
     }
 
-    public ObservableList<ReservacionDAO> SELECT() {
+
+    public  static ObservableList<ReservacionDAO> SELECT() {
         String query = "SELECT * FROM reservacion";
         ObservableList<ReservacionDAO> listaR = FXCollections.observableArrayList();
         ReservacionDAO objR;

@@ -92,5 +92,25 @@ public class ProductoDAO {
         }
         return listap;
     }
+    public static ObservableList<ProductoDAO> selectByCategoria(int idCategoria) {
+        String query = "SELECT * FROM producto WHERE id_categoria = " + idCategoria;
+        ObservableList<ProductoDAO> listaFiltrada = FXCollections.observableArrayList();
+        ProductoDAO producto;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                producto = new ProductoDAO();
+                producto.setId_producto(res.getInt("id_producto"));
+                producto.setProducto(res.getString("producto"));
+                producto.setPrecio(res.getBigDecimal("precio"));
+                producto.setId_categoria(res.getInt("id_categoria"));
+                listaFiltrada.add(producto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaFiltrada;
+    }
 
 }

@@ -53,7 +53,7 @@ public class MesaDAO {
         }
 
     }
-    public ObservableList<MesaDAO> SELECT(){
+    public  static ObservableList<MesaDAO> SELECT(){
         String query = "SELECT * FROM mesa";
         ObservableList<MesaDAO> listaM = FXCollections.observableArrayList();
         MesaDAO objM;

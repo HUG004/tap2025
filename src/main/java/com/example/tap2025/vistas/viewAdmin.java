@@ -17,8 +17,11 @@ public class viewAdmin extends Stage {
     private HBox hbox;
     private Label lbl_admin;
     private GridPane grid;
-    private Button btn_Clt, btn_producto, btn_categoria, btn_tipo_categoria,btn_empleado, btn_proveedor;
+    private Button btn_Clt, btn_producto, btn_categoria, btn_tipo_categoria,
+            btn_empleado, btn_proveedor, btn_insumo, btn_mesa, btn_reservacion,
+            btn_reservacion_mesa, btn_Detalle_producto;
     private Button btnCerrarSesion;
+    private Button btnTickets, btnEstadisticas;
 
     public viewAdmin(){
         CrearUI();
@@ -65,6 +68,34 @@ public class viewAdmin extends Stage {
         btn_proveedor.setOnAction(actionEvent -> new ListaProveedores());
         btn_proveedor.getStyleClass().add("btn-primary");
 
+        btn_insumo = new Button("Insumo");
+        btn_insumo.setOnAction(actionEvent -> new ListaInsumo());
+        btn_insumo.getStyleClass().add("btn-primary");
+
+        btn_mesa = new Button("Mesa");
+        btn_mesa.setOnAction(actionEvent -> new ListaMesa());
+        btn_mesa.getStyleClass().add("btn-primary");
+
+        btn_reservacion = new Button("Reservacion");
+        btn_reservacion.setOnAction(actionEvent -> new ListaReservacion());
+        btn_reservacion.getStyleClass().add("btn-primary");
+
+        btn_reservacion_mesa = new Button("Reservacion mesa");
+        btn_reservacion_mesa.setOnAction(actionEvent -> new ListaReservacion_mesa());
+        btn_reservacion_mesa.getStyleClass().add("btn-primary");
+
+        btn_Detalle_producto = new Button("Detalle producto");
+        btn_Detalle_producto.setOnAction(actionEvent -> new ListaDetalle_Producto());
+        btn_Detalle_producto.getStyleClass().add("btn-primary");
+
+        btnTickets = new Button("Tickets");
+        btnTickets.setOnAction(actionEvent -> new ListaTickets());
+        btnTickets.getStyleClass().add("btn-success");
+
+        btnEstadisticas = new Button("Estadisticas");
+        btnEstadisticas.setOnAction(actionEvent -> new Estadisticas());
+        btnEstadisticas.getStyleClass().add("btn-primary");
+
 /*        btnRepTotal = new Button("Reporte total de artistas y canciones");
         btnRepTotal.setOnAction(actionEvent -> {
             ReportePDF reportePDF = new ReportePDF();
@@ -84,6 +115,13 @@ public class viewAdmin extends Stage {
         grid.add(btn_categoria, 1, 0);
         grid.add(btn_producto, 1, 1);
         grid.add(btn_proveedor,1,2);
+        grid.add(btn_insumo,2,0);
+        grid.add(btn_mesa,2,1);
+        grid.add(btn_reservacion,2,2);
+        grid.add(btn_reservacion_mesa,3,0);
+        grid.add(btn_Detalle_producto,3,1);
+        grid.add(btnTickets, 3, 2);
+        grid.add(btnEstadisticas,4,0);
         lbl_admin = new Label("Administrador");
         lbl_admin.getStyleClass().add("title");
 
@@ -105,7 +143,6 @@ public class viewAdmin extends Stage {
 
 
     private void cerrarSesion() {
-        //new Login();
         this.close();
     }
 }
