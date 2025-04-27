@@ -16,6 +16,8 @@ public class FormProducto extends Stage {
     private Scene escena;
     private ProductoDAO objP;
     private TableView<ProductoDAO> tbvProducto;
+    private TextField txtImagen; // NUEVO
+
 
     public FormProducto(TableView<ProductoDAO> tbvProducto, ProductoDAO obj){
         this.tbvProducto = tbvProducto;
@@ -27,6 +29,7 @@ public class FormProducto extends Stage {
             txtproducto.setText(objP.getProducto());
             txtprecio.setText(objP.getPrecio().toString());
             txtcategoria.setText(String.valueOf(objP.getId_categoria()));
+            txtImagen.setText(objP.getImagen());
         }
         this.setTitle("Registrar Producto");
         this.setScene(escena);
@@ -39,11 +42,14 @@ public class FormProducto extends Stage {
         txtprecio.setPromptText("Precio del producto");
         txtcategoria = new TextField();
         txtcategoria.setPromptText("Categoria del producto");
+        txtImagen = new TextField();
+        txtImagen.setPromptText("Ruta de la imagen");
         btnGuardar = new Button("Guardar");
         btnGuardar.setOnAction(actionEvent -> {
             objP.setProducto(txtproducto.getText());
             objP.setPrecio(new BigDecimal(txtprecio.getText()));
             objP.setId_categoria(Integer.parseInt(txtcategoria.getText()));
+            objP.setImagen(txtImagen.getText());
             if( objP.getId_producto() > 0 )
                 objP.UPDATE();
             else
@@ -52,7 +58,7 @@ public class FormProducto extends Stage {
             tbvProducto.refresh();
             this.close();
         });
-        vBox = new VBox(txtproducto,txtprecio,txtcategoria, btnGuardar);
+        vBox = new VBox(txtproducto,txtprecio,txtcategoria, txtImagen, btnGuardar);
         escena = new Scene(vBox,320,150);
     }
 }

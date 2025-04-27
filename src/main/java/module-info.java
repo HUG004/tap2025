@@ -10,5 +10,6 @@ module com.example.tap2025 {
     requires java.sql;
     requires com.github.librepdf.openpdf;
     requires java.desktop;
+    requires itextpdf;
     opens com.example.tap2025.models;
 }

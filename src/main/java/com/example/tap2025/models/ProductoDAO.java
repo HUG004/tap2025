@@ -11,6 +11,15 @@ public class ProductoDAO {
     private String producto;
     private BigDecimal precio;
     private int id_categoria;
+    private String imagen;
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
 
     public int getId_producto() {
         return id_producto;
@@ -43,8 +52,8 @@ public class ProductoDAO {
         this.id_categoria = id_categoria;
     }
     public void INSERT(){
-        String query = "INSERT INTO producto(producto, precio, id_categoria)"
-                + "values('"+producto+"','"+precio+"','"+id_categoria+"') ";
+        String query = "INSERT INTO producto(producto, precio, id_categoria, imagen)"
+                + "values('"+producto+"','"+precio+"','"+id_categoria+"', '"+imagen+"') ";
         try{
             Statement stmt =  conexion.connection.createStatement();
             stmt.executeUpdate(query);
@@ -53,7 +62,7 @@ public class ProductoDAO {
         }
     }
     public void UPDATE(){
-        String query = "UPDATE producto SET producto = '"+producto+"', precio = '"+precio+"', id_categoria = '"+id_categoria+"' WHERE id_producto = "+id_producto;
+        String query = "UPDATE producto SET producto = '"+producto+"', precio = '"+precio+"', id_categoria = '"+id_categoria+"', imagen = '"+imagen+"' WHERE id_producto = "+id_producto;
         try{
             Statement stmt = conexion.connection.createStatement();
             stmt.executeUpdate(query);
@@ -85,6 +94,7 @@ public class ProductoDAO {
                 objp.setProducto(res.getString("producto"));
                 objp.setPrecio(res.getBigDecimal("precio"));
                 objp.setId_categoria(res.getInt("id_categoria"));
+                objp.setImagen(res.getString("imagen"));
                 listap.add(objp);
             }
         }catch (Exception e){

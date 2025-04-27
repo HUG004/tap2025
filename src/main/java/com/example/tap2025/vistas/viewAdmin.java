@@ -1,5 +1,6 @@
 package com.example.tap2025.vistas;
 
+import com.example.tap2025.componentes.ReportePDF;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,7 +22,7 @@ public class viewAdmin extends Stage {
             btn_empleado, btn_proveedor, btn_insumo, btn_mesa, btn_reservacion,
             btn_reservacion_mesa, btn_Detalle_producto;
     private Button btnCerrarSesion;
-    private Button btnTickets, btnEstadisticas;
+    private Button btnTickets, btnEstadisticas, btnReportes;
 
     public viewAdmin(){
         CrearUI();
@@ -96,6 +97,19 @@ public class viewAdmin extends Stage {
         btnEstadisticas.setOnAction(actionEvent -> new Estadisticas());
         btnEstadisticas.getStyleClass().add("btn-primary");
 
+        btnReportes = new Button("Reportes");
+        btnReportes.setOnAction(actionEvent -> {
+            ReportePDF reportePDF = new ReportePDF();
+            reportePDF.generarReporte();
+            try {
+                java.awt.Desktop.getDesktop().open(new java.io.File("C:\\Users\\Usuario\\IdeaProjects\\tap2025\\src\\main\\java\\com\\example\\tap2025\\ReportePDF\\Reporte_Estadisticas.pdf"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        btnReportes.getStyleClass().add("btn-primary");
+
+
 /*        btnRepTotal = new Button("Reporte total de artistas y canciones");
         btnRepTotal.setOnAction(actionEvent -> {
             ReportePDF reportePDF = new ReportePDF();
@@ -122,6 +136,7 @@ public class viewAdmin extends Stage {
         grid.add(btn_Detalle_producto,3,1);
         grid.add(btnTickets, 3, 2);
         grid.add(btnEstadisticas,4,0);
+        grid.add(btnReportes,4,1);
         lbl_admin = new Label("Administrador");
         lbl_admin.getStyleClass().add("title");
 

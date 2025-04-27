@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URL;  // IMPORTANTE
+
 public class ListaProductos extends Stage {
     private ToolBar tlbMenu;
     private TableView<ProductoDAO> tbvProducto;
@@ -22,6 +24,7 @@ public class ListaProductos extends Stage {
         this.setScene(escena);
         this.show();
     }
+
     private void CrearUI(){
         tbvProducto = new TableView<>();
         btnAgegar = new Button();
@@ -35,15 +38,52 @@ public class ListaProductos extends Stage {
         vBox = new VBox(tlbMenu,tbvProducto);
         escena = new Scene(vBox,800,400);
     }
-    private void CreateTable(){
 
+    private void CreateTable(){
         ProductoDAO objP = new ProductoDAO();
+
         TableColumn<ProductoDAO,String> tbcNombre = new TableColumn<>("Nombre del producto");
         tbcNombre.setCellValueFactory(new PropertyValueFactory<>("producto"));
+
         TableColumn<ProductoDAO,String> tbcPrecio = new TableColumn<>("Precio");
         tbcPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+
         TableColumn<ProductoDAO,String> tbcCategoria = new TableColumn<>("Categoria");
         tbcCategoria.setCellValueFactory(new PropertyValueFactory<>("id_categoria"));
+
+        TableColumn<ProductoDAO, String> tbcImagen = new TableColumn<>("Imagen");
+        tbcImagen.setCellValueFactory(new PropertyValueFactory<>("imagen"));
+        tbcImagen.setCellFactory(col -> new TableCell<ProductoDAO, String>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(String ruta, boolean empty) {
+                super.updateItem(ruta, empty);
+                if (empty || ruta == null || ruta.isEmpty()) {
+                    setGraphic(null);
+                } else {
+                    try {
+                        if (!ruta.startsWith("/")) {
+                            ruta = "/" + ruta;
+                        }
+                        URL url = getClass().getResource(ruta);
+                        System.out.println("Buscando imagen en ruta: " + ruta + " -> " + url);
+                        if (url == null) {
+                            setGraphic(null);
+                        } else {
+                            imageView.setImage(new javafx.scene.image.Image(url.toExternalForm()));
+                            imageView.setFitHeight(60);
+                            imageView.setFitWidth(60);
+                            setGraphic(imageView);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
+
         TableColumn<ProductoDAO, String> tbcEditar = new TableColumn<>("Editar");
         tbcEditar.setCellFactory(col -> new ButtonCell<>(
                 "Editar",
@@ -62,8 +102,8 @@ public class ListaProductos extends Stage {
                 },
                 c -> ProductoDAO.SELECT()
         ));
-        tbvProducto.getColumns().addAll(tbcNombre, tbcPrecio, tbcCategoria,  tbcEditar, tbcEliminar);
+
+        tbvProducto.getColumns().addAll(tbcNombre, tbcPrecio, tbcCategoria, tbcImagen ,tbcEditar, tbcEliminar);
         tbvProducto.setItems(objP.SELECT());
     }
-
 }
