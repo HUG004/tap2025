@@ -59,7 +59,7 @@ public class ListaDetalle_Producto extends Stage {
         TableColumn<Detalle_ProductoDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, detalle) -> {}, // No se usa en eliminar
+                (table, detalle) -> {},
                 detalle -> {
                     detalle.DELETE();
                     return null;

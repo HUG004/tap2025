@@ -73,14 +73,14 @@ public class ListaEmpleados extends Stage {
         tbcEditar.setCellFactory(col -> new ButtonCell<>(
                 "Editar",
                 (tableView, empleado) -> new FormEmpleados(tableView, empleado),
-                e -> null, // No hace nada en "Editar"
+                e -> null,
                 e -> EmpleadoDAO.SELECT()
         ));
 
         TableColumn<EmpleadoDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, empleado) -> {}, // No se usa en eliminar
+                (table, empleado) -> {},
                 empleado -> {
                     empleado.DELETE();
                     return null;

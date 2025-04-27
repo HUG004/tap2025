@@ -57,7 +57,7 @@ public class ListaCategoria extends Stage {
         TableColumn<CategoriaDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, tipo_categoria) -> {}, // No se usa en eliminar
+                (table, tipo_categoria) -> {},
                 categoria -> {
                     categoria.DELETE();
                     return null;

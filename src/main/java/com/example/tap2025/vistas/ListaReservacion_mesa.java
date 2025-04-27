@@ -59,7 +59,7 @@ public class ListaReservacion_mesa extends Stage{
         TableColumn<Reservacion_MesaDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, reservacion) -> {}, // No se usa en eliminar
+                (table, reservacion) -> {},
                 reservacion -> {
                     reservacion.DELETE();
                     return null;

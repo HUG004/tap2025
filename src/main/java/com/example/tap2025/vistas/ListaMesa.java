@@ -54,7 +54,7 @@ public class ListaMesa extends Stage {
         TableColumn<MesaDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, mesa) -> {}, // No se usa en eliminar
+                (table, mesa) -> {},
                 mesa -> {
                     mesa.DELETE();
                     return null;

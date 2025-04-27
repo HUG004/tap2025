@@ -58,7 +58,7 @@ public class ListaInsumo extends Stage {
         TableColumn<InsumoDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, insumo) -> {}, // No se usa en eliminar
+                (table, insumo) -> {},
                 insumo -> {
                     insumo.DELETE();
                     return null;

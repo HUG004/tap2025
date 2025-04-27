@@ -62,7 +62,7 @@ public class ListaProveedores extends Stage {
         TableColumn<ProveedorDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, proveedor) -> {}, // No se usa en eliminar
+                (table, proveedor) -> {},
                 proveedor -> {
                     proveedor.DELETE();
                     return null;

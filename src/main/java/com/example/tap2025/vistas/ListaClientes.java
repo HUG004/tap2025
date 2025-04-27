@@ -60,7 +60,7 @@ public class ListaClientes extends Stage {
         TableColumn<ClienteDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, cliente) -> {}, // No se usa en eliminar
+                (table, cliente) -> {},
                 cliente -> {
                     cliente.DELETE();
                     return null;
