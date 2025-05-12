@@ -13,6 +13,17 @@ public class ReservacionDAO {
     private int id_cliente;
     private LocalDate fecha_reservacion;
 
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+
     public int getId_reservacion() {
         return id_reservacion;
     }
@@ -72,10 +83,18 @@ public class ReservacionDAO {
             e.printStackTrace();
         }
     }
-
+    public void DESACTIVAR() {
+        String query = "UPDATE reservacion SET activo = FALSE WHERE id_reservacion = " + id_reservacion;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public  static ObservableList<ReservacionDAO> SELECT() {
-        String query = "SELECT * FROM reservacion";
+        String query = "SELECT * FROM reservacion WHERE activo = TRUE";
         ObservableList<ReservacionDAO> listaR = FXCollections.observableArrayList();
         ReservacionDAO objR;
         try {

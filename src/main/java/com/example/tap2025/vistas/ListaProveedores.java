@@ -1,12 +1,10 @@
 package com.example.tap2025.vistas;
 
 import com.example.tap2025.componentes.ButtonCell;
+import com.example.tap2025.models.ProductoDAO;
 import com.example.tap2025.models.ProveedorDAO;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -51,6 +49,9 @@ public class ListaProveedores extends Stage {
         tbcemail.setCellValueFactory(new PropertyValueFactory<>("email"));
         TableColumn<ProveedorDAO,String> tbcnota = new TableColumn<>("nota del proveedor");
         tbcnota.setCellValueFactory(new PropertyValueFactory<>("nota"));
+        TableColumn<ProveedorDAO,String> tbcActivo = new TableColumn<>("Activo");
+        tbcActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
+
         TableColumn<ProveedorDAO, String> tbcEditar = new TableColumn<>("Editar");
         tbcEditar.setCellFactory(col -> new ButtonCell<>(
                 "Editar",
@@ -64,12 +65,22 @@ public class ListaProveedores extends Stage {
                 "Eliminar",
                 (table, proveedor) -> {},
                 proveedor -> {
-                    proveedor.DELETE();
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar este proveedor?");
+                    confirmacion.setContentText("Este proveedor se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            proveedor.DESACTIVAR();
+                            tbvProveedor.setItems(ProveedorDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
                 c -> ProveedorDAO.SELECT()
         ));
-        tbvProveedor.getColumns().addAll(tbcProveedor,tbcTelefono,tbcdireccion,tbcemail,tbcnota,  tbcEditar, tbcEliminar);
+        tbvProveedor.getColumns().addAll(tbcProveedor,tbcTelefono,tbcdireccion,tbcemail,tbcnota, tbcActivo ,tbcEditar, tbcEliminar);
         tbvProveedor.setItems(objc.SELECT());
     }
 

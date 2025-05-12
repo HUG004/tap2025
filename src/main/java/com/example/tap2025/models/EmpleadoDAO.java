@@ -18,7 +18,15 @@ public class EmpleadoDAO {
     private String tel_empleado;
     private String horario;
     private LocalDate fecha_ingreso;
+    private boolean activo;
 
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
     public int getId_empleado(){return id_empleado;    }
     public void setId_empleado(int id_empleado){this.id_empleado = id_empleado;}
     public String getNombre(){return nombre;}
@@ -107,8 +115,18 @@ public class EmpleadoDAO {
         }
 
     }
+
+    public void DESACTIVAR() {
+        String query = "UPDATE empleado SET activo = FALSE WHERE id_empleado = " + id_empleado;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public  static ObservableList<EmpleadoDAO> SELECT(){
-        String query = "SELECT * FROM empleado";
+        String query = "SELECT * FROM empleado WHERE activo = TRUE";
         ObservableList<EmpleadoDAO> listaE = FXCollections.observableArrayList();
         EmpleadoDAO objE;
         try{
@@ -127,6 +145,7 @@ public class EmpleadoDAO {
                 objE.setTel_empleado(res.getString("tel_empleado"));
                 objE.setHorario(res.getString("horario"));
                 objE.setFecha_ingreso(res.getDate("fecha_ingreso") != null ? res.getDate("fecha_ingreso").toLocalDate() : null);
+                objE.setActivo(res.getBoolean("activo"));
                 listaE.add(objE);
             }
         }catch (Exception e){

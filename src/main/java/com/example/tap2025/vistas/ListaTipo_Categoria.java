@@ -40,6 +40,9 @@ public class ListaTipo_Categoria extends Stage {
         tipo_categoriaDAO objtc = new tipo_categoriaDAO();
         TableColumn<tipo_categoriaDAO,String> tbcTipo_Categoria = new TableColumn<>("Nombre del Tipo de Categoria");
         tbcTipo_Categoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
+        TableColumn<tipo_categoriaDAO,String> tbcActivo = new TableColumn<>("Activo");
+        tbcActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
+
         TableColumn<tipo_categoriaDAO, String> tbcEditar = new TableColumn<>("Editar");
         tbcEditar.setCellFactory(col -> new ButtonCell<>(
                 "Editar",
@@ -53,12 +56,22 @@ public class ListaTipo_Categoria extends Stage {
                 "Eliminar",
                 (table, tipo_categoria) -> {},
                 tipo_categoria -> {
-                    tipo_categoria.DELETE();
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar este tipo de categoria?");
+                    confirmacion.setContentText("Este tipo de categoria se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            tipo_categoria.DESACTIVAR();
+                            tbvTipo_Categoria.setItems(tipo_categoriaDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
                 c -> tipo_categoriaDAO.SELECT()
         ));
-        tbvTipo_Categoria.getColumns().addAll(tbcTipo_Categoria,  tbcEditar, tbcEliminar);
+        tbvTipo_Categoria.getColumns().addAll(tbcTipo_Categoria, tbcActivo ,tbcEditar, tbcEliminar);
         tbvTipo_Categoria.setItems(objtc.SELECT());
     }
 

@@ -8,6 +8,15 @@ import java.sql.Statement;
 public class tipo_categoriaDAO {
     private int id_tipo_categoria;
     private String categoria;
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
     public int getId_tipo_categoria() {
         return id_tipo_categoria;
@@ -54,8 +63,19 @@ public class tipo_categoriaDAO {
         }
 
     }
+
+    public void DESACTIVAR() {
+        String query = "UPDATE tipo_categoria SET activo = FALSE WHERE id_tipo_categoria = " + id_tipo_categoria;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ObservableList<tipo_categoriaDAO> SELECT(){
-        String query = "SELECT * FROM tipo_categoria";
+        String query = "SELECT * FROM tipo_categoria WHERE activo = TRUE";
         ObservableList<tipo_categoriaDAO> listaTC = FXCollections.observableArrayList();
         tipo_categoriaDAO objTC;
         try{
@@ -65,6 +85,7 @@ public class tipo_categoriaDAO {
                 objTC = new tipo_categoriaDAO();
                 objTC.setId_tipo_categoria(res.getInt("id_tipo_categoria"));
                 objTC.setCategoria(res.getString("categoria"));
+                objTC.setActivo(res.getBoolean("activo"));
                 listaTC.add(objTC);
             }
         }catch (Exception e){

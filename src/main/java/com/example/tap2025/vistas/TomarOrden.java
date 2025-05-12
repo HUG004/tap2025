@@ -203,10 +203,9 @@ public class TomarOrden extends Stage {
         idOrdenActual = -1;
         ordenActual = null;
 
-        // Limpiar productos y categorias (opcional, si quieres que también se limpien)
         panelProductos.getChildren().clear();
         panelCategorias.getChildren().clear();
-        cargarCategorias(); // Recarga las categorías si quieres que vuelvan a mostrarse
+        cargarCategorias();
 
     }
 

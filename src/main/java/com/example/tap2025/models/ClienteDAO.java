@@ -13,6 +13,15 @@ public class ClienteDAO {
     private String direccion;
     private String tel_cliente;
     private String email_cliente;
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
     public int getId_cliente() {
         return id_cliente;
@@ -95,8 +104,18 @@ public class ClienteDAO {
         }
 
     }
+    public void DESACTIVAR() {
+        String query = "UPDATE cliente SET activo = FALSE WHERE id_cliente = " + id_cliente;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public  static ObservableList<ClienteDAO> SELECT(){
-        String query = "SELECT * FROM cliente";
+        String query = "SELECT * FROM cliente WHERE activo = TRUE";
         ObservableList<ClienteDAO> listaC = FXCollections.observableArrayList();
         ClienteDAO objC;
         try{
@@ -111,6 +130,8 @@ public class ClienteDAO {
                 objC.setDireccion(res.getString("direccion"));
                 objC.setEmail_cliente(res.getString("email_cliente"));
                 objC.setTel_cliente(res.getString("tel_cliente"));
+                objC.setActivo(res.getBoolean("activo"));
+
                 listaC.add(objC);
             }
         }catch (Exception e){

@@ -68,7 +68,8 @@ public class ListaEmpleados extends Stage {
 
         TableColumn<EmpleadoDAO, String> tbcHorario = new TableColumn<>("Horario");
         tbcHorario.setCellValueFactory(new PropertyValueFactory<>("horario"));
-
+        TableColumn<EmpleadoDAO,String> tbcActivo = new TableColumn<>("Activo");
+        tbcActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
         TableColumn<EmpleadoDAO, String> tbcEditar = new TableColumn<>("Editar");
         tbcEditar.setCellFactory(col -> new ButtonCell<>(
                 "Editar",
@@ -82,7 +83,17 @@ public class ListaEmpleados extends Stage {
                 "Eliminar",
                 (table, empleado) -> {},
                 empleado -> {
-                    empleado.DELETE();
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar este producto?");
+                    confirmacion.setContentText("Este producto se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            empleado.DESACTIVAR();
+                            tbvEmpleados.setItems(EmpleadoDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
                 e -> EmpleadoDAO.SELECT()
@@ -90,7 +101,7 @@ public class ListaEmpleados extends Stage {
 
         tbvEmpleados.getColumns().addAll(
                 tbcNombre, tbcApellido, tbcCurp, tbcRfc, tbcNss,
-                tbcSueldo, tbcPuesto, tbcTelefono, tbcHorario,
+                tbcSueldo, tbcPuesto, tbcTelefono, tbcHorario,tbcActivo,
                 tbcEditar, tbcEliminar
         );
         tbvEmpleados.setItems(objE.SELECT());

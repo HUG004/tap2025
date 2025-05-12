@@ -16,6 +16,7 @@ public class FormProveedor extends Stage {
     private ProveedorDAO objpr;
     private TableView<ProveedorDAO> tbvProveedor;
 
+
     public FormProveedor(TableView<ProveedorDAO> tbvProveedor, ProveedorDAO obj){
         this.tbvProveedor = tbvProveedor;
         CrearUI();

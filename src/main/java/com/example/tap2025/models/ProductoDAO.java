@@ -12,6 +12,15 @@ public class ProductoDAO {
     private BigDecimal precio;
     private int id_categoria;
     private String imagen;
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
     public String getImagen() {
         return imagen;
@@ -81,8 +90,19 @@ public class ProductoDAO {
         }
 
     }
+
+    public void DESACTIVAR() {
+        String query = "UPDATE producto SET activo = FALSE WHERE id_producto = " + id_producto;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public  static ObservableList<ProductoDAO> SELECT(){
-        String query = "SELECT * FROM producto";
+        String query = "SELECT * FROM producto WHERE activo = TRUE";
         ObservableList<ProductoDAO> listap = FXCollections.observableArrayList();
         ProductoDAO objp;
         try{
@@ -94,6 +114,7 @@ public class ProductoDAO {
                 objp.setProducto(res.getString("producto"));
                 objp.setPrecio(res.getBigDecimal("precio"));
                 objp.setId_categoria(res.getInt("id_categoria"));
+                objp.setActivo(res.getBoolean("activo"));
                 objp.setImagen(res.getString("imagen"));
                 listap.add(objp);
             }
@@ -121,6 +142,20 @@ public class ProductoDAO {
             e.printStackTrace();
         }
         return listaFiltrada;
+    }
+
+    public boolean tieneRelacionEnDetalleProducto() {
+        String query = "SELECT COUNT(*) FROM detalle_producto WHERE id_producto = " + id_producto;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

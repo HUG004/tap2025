@@ -1,6 +1,7 @@
 package com.example.tap2025.vistas;
 
 import com.example.tap2025.componentes.ButtonCell;
+import com.example.tap2025.models.CategoriaDAO;
 import com.example.tap2025.models.ClienteDAO;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -62,12 +63,22 @@ public class ListaClientes extends Stage {
                 "Eliminar",
                 (table, cliente) -> {},
                 cliente -> {
-                    cliente.DELETE();
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar este cliente?");
+                    confirmacion.setContentText("Este cliente se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            cliente.DESACTIVAR();
+                            tbvClientes.setItems(ClienteDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
                 c -> ClienteDAO.SELECT()
         ));
-        tbvClientes.getColumns().addAll(tbcNombre, tbcApellido, tbcDireccion, tbcEmail, tbcTelefono, tbcEditar, tbcEliminar);
+        tbvClientes.getColumns().addAll(tbcNombre, tbcApellido, tbcDireccion, tbcEmail, tbcTelefono,tbcEditar, tbcEliminar);
         tbvClientes.setItems(objC.SELECT());
     }
 }

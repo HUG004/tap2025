@@ -42,6 +42,8 @@ public class ListaProductos extends Stage {
     private void CreateTable(){
         ProductoDAO objP = new ProductoDAO();
 
+        TableColumn<ProductoDAO,String> tbcId = new TableColumn<>("ID del producto");
+        tbcId.setCellValueFactory(new PropertyValueFactory<>("id_producto"));
         TableColumn<ProductoDAO,String> tbcNombre = new TableColumn<>("Nombre del producto");
         tbcNombre.setCellValueFactory(new PropertyValueFactory<>("producto"));
 
@@ -50,6 +52,10 @@ public class ListaProductos extends Stage {
 
         TableColumn<ProductoDAO,String> tbcCategoria = new TableColumn<>("Categoria");
         tbcCategoria.setCellValueFactory(new PropertyValueFactory<>("id_categoria"));
+
+        TableColumn<ProductoDAO,String> tbcActivo = new TableColumn<>("Activo");
+        tbcActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
+
 
         TableColumn<ProductoDAO, String> tbcImagen = new TableColumn<>("Imagen");
         tbcImagen.setCellValueFactory(new PropertyValueFactory<>("imagen"));
@@ -95,15 +101,25 @@ public class ListaProductos extends Stage {
         TableColumn<ProductoDAO, String> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setCellFactory(col -> new ButtonCell<>(
                 "Eliminar",
-                (table, producto) -> {},
-                cliente -> {
-                    cliente.DELETE();
+                (table, producto) -> {}, // no se usa
+                producto -> {
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar este producto?");
+                    confirmacion.setContentText("Este producto se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            producto.DESACTIVAR();
+                            tbvProducto.setItems(ProductoDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
                 c -> ProductoDAO.SELECT()
         ));
 
-        tbvProducto.getColumns().addAll(tbcNombre, tbcPrecio, tbcCategoria, tbcImagen ,tbcEditar, tbcEliminar);
+        tbvProducto.getColumns().addAll(tbcId,tbcNombre, tbcPrecio, tbcCategoria, tbcActivo, tbcImagen ,tbcEditar, tbcEliminar);
         tbvProducto.setItems(objP.SELECT());
     }
 }

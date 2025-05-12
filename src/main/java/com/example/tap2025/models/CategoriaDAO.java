@@ -8,6 +8,15 @@ public class CategoriaDAO {
     private int id_categoria;
     private int tipo_categoria;
     private String descripcion;
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
     public int getId_categoria() {
         return id_categoria;
@@ -62,8 +71,19 @@ public class CategoriaDAO {
         }
 
     }
+
+    public void DESACTIVAR() {
+        String query = "UPDATE categoria SET activo = FALSE WHERE id_categoria = " + id_categoria;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ObservableList<CategoriaDAO> SELECT(){
-        String query = "SELECT * FROM categoria";
+        String query = "SELECT * FROM categoria WHERE activo = TRUE";
         ObservableList<CategoriaDAO> listaCa = FXCollections.observableArrayList();
         CategoriaDAO objCa;
         try{
@@ -74,6 +94,7 @@ public class CategoriaDAO {
                 objCa.setId_categoria(res.getInt("id_categoria"));
                 objCa.setTipo_categoria(res.getInt("tipo_categoria"));
                 objCa.setDescripcion(res.getString("descripcion"));
+                objCa.setActivo(res.getBoolean("activo"));
                 listaCa.add(objCa);
             }
         }catch (Exception e){

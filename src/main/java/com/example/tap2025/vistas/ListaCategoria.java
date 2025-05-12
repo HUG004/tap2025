@@ -2,11 +2,9 @@ package com.example.tap2025.vistas;
 
 import com.example.tap2025.componentes.ButtonCell;
 import com.example.tap2025.models.CategoriaDAO;
+import com.example.tap2025.models.ProductoDAO;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -45,6 +43,8 @@ public class ListaCategoria extends Stage {
         tbcCategoria.setCellValueFactory(new PropertyValueFactory<>("tipo_categoria"));
         TableColumn<CategoriaDAO,String> tbcDescripcion = new TableColumn<>("Nombre de la Categoria");
         tbcDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        TableColumn<CategoriaDAO,String> tbcActivo = new TableColumn<>("Activo");
+        tbcActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
 
         TableColumn<CategoriaDAO, String> tbcEditar = new TableColumn<>("Editar");
         tbcEditar.setCellFactory(col -> new ButtonCell<>(
@@ -59,12 +59,22 @@ public class ListaCategoria extends Stage {
                 "Eliminar",
                 (table, tipo_categoria) -> {},
                 categoria -> {
-                    categoria.DELETE();
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar esta categoria?");
+                    confirmacion.setContentText("Esta categoria se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            categoria.DESACTIVAR();
+                            tbvCategoria.setItems(CategoriaDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
                 c -> CategoriaDAO.SELECT()
         ));
-        tbvCategoria.getColumns().addAll(tbcDescripcion,  tbcEditar, tbcEliminar);
+        tbvCategoria.getColumns().addAll(tbcDescripcion, tbcActivo ,tbcEditar, tbcEliminar);
         tbvCategoria.setItems(objc.SELECT());
     }
 

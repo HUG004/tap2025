@@ -11,6 +11,15 @@ public class ProveedorDAO {
     private String direccion;
     private String email;
     private String nota;
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
     public int getId_proveedor() {return id_proveedor;}
 
@@ -88,8 +97,18 @@ public class ProveedorDAO {
         }
 
     }
+
+    public void DESACTIVAR() {
+        String query = "UPDATE proveedor SET activo = FALSE WHERE id_proveedor = " + id_proveedor;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static ObservableList<ProveedorDAO> SELECT(){
-        String query = "SELECT * FROM proveedor";
+        String query = "SELECT * FROM proveedor WHERE activo = TRUE";
         ObservableList<ProveedorDAO> listaPr = FXCollections.observableArrayList();
         ProveedorDAO objPr;
         try{
@@ -103,6 +122,7 @@ public class ProveedorDAO {
                 objPr.setDireccion(res.getString("direccion"));
                 objPr.setEmail(res.getString("email"));
                 objPr.setNota(res.getString("nota"));
+                objPr.setActivo(res.getBoolean("activo"));
                 listaPr.add(objPr);
             }
         }catch (Exception e){

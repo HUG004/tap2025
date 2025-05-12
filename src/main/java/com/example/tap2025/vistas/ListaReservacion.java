@@ -1,12 +1,10 @@
 package com.example.tap2025.vistas;
 
 import com.example.tap2025.componentes.ButtonCell;
+import com.example.tap2025.models.ProductoDAO;
 import com.example.tap2025.models.ReservacionDAO;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -58,7 +56,17 @@ public class ListaReservacion extends Stage {
                 "Eliminar",
                 (table, reservacion) -> {},
                 reservacion -> {
-                    reservacion.DELETE();
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar esta reservacion?");
+                    confirmacion.setContentText("esta reservacion se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            reservacion.DESACTIVAR();
+                            tbvReservacion.setItems(ReservacionDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
                 c -> ReservacionDAO.SELECT()

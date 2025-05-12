@@ -11,6 +11,16 @@ public class InsumoDAO {
     private String nombre;
     private BigDecimal costo;
 
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
     public int getId_insumo() {
         return id_insumo;
     }
@@ -72,22 +82,33 @@ public class InsumoDAO {
         }
 
     }
-    public  static ObservableList<InsumoDAO> SELECT(){
-        String query = "SELECT * FROM insumo";
+
+    public void DESACTIVAR() {
+        String query = "UPDATE insumo SET activo = FALSE WHERE id_insumo = " + id_insumo;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static ObservableList<InsumoDAO> SELECT() {
+        String query = "SELECT * FROM insumo WHERE activo = TRUE";
         ObservableList<InsumoDAO> listaI = FXCollections.observableArrayList();
         InsumoDAO objI;
-        try{
+        try {
             Statement stmt = conexion.connection.createStatement();
             ResultSet res = stmt.executeQuery(query);
-            while(res.next()){
+            while (res.next()) {
                 objI = new InsumoDAO();
                 objI.setId_insumo(res.getInt("id_insumo"));
                 objI.setId_proveedor(res.getInt("id_proveedor"));
                 objI.setNombre(res.getString("nombre"));
                 objI.setCosto(res.getBigDecimal("costo"));
+                objI.setActivo(res.getBoolean("activo"));
                 listaI.add(objI);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return listaI;

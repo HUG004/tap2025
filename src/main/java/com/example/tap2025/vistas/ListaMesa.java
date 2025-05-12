@@ -2,11 +2,9 @@ package com.example.tap2025.vistas;
 
 import com.example.tap2025.componentes.ButtonCell;
 import com.example.tap2025.models.MesaDAO;
+import com.example.tap2025.models.ProductoDAO;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -21,7 +19,7 @@ public class ListaMesa extends Stage {
 
     public ListaMesa(){
         CrearUI();
-        this.setTitle("Listado de Productos");
+        this.setTitle("Listado de Mesas");
         this.setScene(escena);
         this.show();
     }
@@ -43,6 +41,8 @@ public class ListaMesa extends Stage {
         MesaDAO objM = new MesaDAO();
         TableColumn<MesaDAO,String> tbcCapacidad = new TableColumn<>("Capacidad de la mesa");
         tbcCapacidad.setCellValueFactory(new PropertyValueFactory<>("capacidad"));
+        TableColumn<MesaDAO,String> tbcActivo = new TableColumn<>("Activo");
+        tbcActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
         TableColumn<MesaDAO, String> tbcEditar = new TableColumn<>("Editar");
         tbcEditar.setCellFactory(col -> new ButtonCell<>(
                 "Editar",
@@ -56,12 +56,23 @@ public class ListaMesa extends Stage {
                 "Eliminar",
                 (table, mesa) -> {},
                 mesa -> {
-                    mesa.DELETE();
+                    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmacion.setTitle("Confirmar eliminación");
+                    confirmacion.setHeaderText("¿Está seguro que desea eliminar esta mesa?");
+                    confirmacion.setContentText("Esta mesa se desactivará, pero no se eliminará de la base de datos.");
+
+                    confirmacion.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            mesa.DESACTIVAR();
+                            tbvMesa.setItems(MesaDAO.SELECT());
+                        }
+                    });
                     return null;
                 },
+
                 c -> MesaDAO.SELECT()
         ));
-        tbvMesa.getColumns().addAll(tbcCapacidad,  tbcEditar, tbcEliminar);
+        tbvMesa.getColumns().addAll(tbcCapacidad, tbcActivo, tbcEditar, tbcEliminar);
         tbvMesa.setItems(objM.SELECT());
     }
 

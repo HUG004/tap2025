@@ -7,6 +7,15 @@ import java.sql.Statement;
 public class MesaDAO {
     private int id_mesa;
     private int capacidad;
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
     public int getId_mesa() {
         return id_mesa;
@@ -53,8 +62,19 @@ public class MesaDAO {
         }
 
     }
+
+    public void DESACTIVAR() {
+        String query = "UPDATE mesa SET activo = FALSE WHERE id_mesa = " + id_mesa;
+        try {
+            Statement stmt = conexion.connection.createStatement();
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public  static ObservableList<MesaDAO> SELECT(){
-        String query = "SELECT * FROM mesa";
+        String query = "SELECT * FROM mesa WHERE activo = TRUE";
         ObservableList<MesaDAO> listaM = FXCollections.observableArrayList();
         MesaDAO objM;
         try{
@@ -64,6 +84,7 @@ public class MesaDAO {
                 objM = new MesaDAO();
                 objM.setId_mesa(res.getInt("id_mesa"));
                 objM.setCapacidad(res.getInt("capacidad"));
+                objM.setActivo(res.getBoolean("activo"));
                 listaM.add(objM);
             }
         }catch (Exception e){
